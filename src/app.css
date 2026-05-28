@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* ============================================
+   zyMemo 温暖治愈设计系统 (Tailwind Theme)
+   完全对应架构手册中的配色与风格
+   ============================================ */
+
+@theme {
+  /* 主色系 - 温暖奶油风 */
+  --color-cream: #f8f1eb;      /* 全局背景 */
+  --color-almond: #fffaf0;     /* 卡片/面板背景 */
+  --color-sakura: #ff9eb1;     /* 强调色 / 自己气泡 */
+  --color-mint: #a8e6cf;       /* 辅助强调 / 对方气泡 */
+  --color-cocoa: #5c4636;      /* 主文字 */
+  --color-taupe: #8c7563;      /* 次要文字 */
+  --color-blush: #ffe4e1;      /* 亮粉辅助 / 标签背景 */
+  --color-beige: #f0e6d9;      /* 弱色背景 / 分割线 */
+
+  /* 圆角系统 - 超级可爱的大圆角 */
+  --radius-3xl: 1.375rem;      /* 22px - 卡片、气泡主圆角 */
+  --radius-4xl: 1.75rem;       /* 28px - 超大圆角（按钮、面板） */
+
+  /* 阴影系统 - 温柔柔和感 */
+  --shadow-healing: 0 0 20px -4px rgb(255 158 177 / 0.3);
+  --shadow-card: 0 2px 16px -4px rgb(92 70 54 / 0.08);
+  --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+}
+
+/* 全局基础样式 */
+:root {
+  color: var(--color-cocoa);
+  background-color: var(--color-cream);
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden; /* Tauri desktop app - prevent body scroll */
+}
+
+html {
+  height: 100%;
+}
+
+/* 让 Tailwind 能识别我们自定义的颜色类 */
+@utility bg-cream { background-color: var(--color-cream); }
+@utility bg-almond { background-color: var(--color-almond); }
+@utility text-cocoa { color: var(--color-cocoa); }
+@utility text-taupe { color: var(--color-taupe); }
+@utility border-beige { border-color: var(--color-beige); }
+
+/* 常用可爱组件样式（可复用） */
+.cute-card {
+  @apply bg-almond rounded-3xl shadow-card border border-beige/50;
+}
+
+.cute-button {
+  @apply px-4 py-2 rounded-3xl font-medium transition-all active:scale-[0.985];
+  background: linear-gradient(90deg, var(--color-sakura), var(--color-mint));
+  color: white;
+}
+
+.cute-button:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-healing);
+}
+
+/* 聊天气泡基础样式（Tailwind 辅助） */
+.bubble {
+  @apply max-w-[78%] px-5 py-3 text-[14px] leading-relaxed shadow-soft;
+  border-radius: 22px;
+}
+
+.bubble.from-me {
+  background-color: var(--color-sakura);
+  color: white;
+  border-bottom-right-radius: 6px;
+}
+
+.bubble:not(.from-me) {
+  background-color: var(--color-mint);
+  color: #3a4d3f;
+  border-bottom-left-radius: 6px;
+}

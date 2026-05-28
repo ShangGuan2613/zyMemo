@@ -1,0 +1,44 @@
+name: Build Windows Portable
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Tauri (Windows portable exe)
+        run: npx tauri build --target x86_64-pc-windows-msvc
+
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: zymemo-windows-portable
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/zymemo.exe
+          retention-days: 30
+
+      - name: Show output
+        run: |
+          echo "=== Build completed ==="
+          ls -lh src-tauri/target/x86_64-pc-windows-msvc/release/zymemo.exe || echo "exe not found"
